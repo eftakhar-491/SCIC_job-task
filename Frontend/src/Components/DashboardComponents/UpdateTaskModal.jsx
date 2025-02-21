@@ -50,7 +50,7 @@ const UpdateTaskModal = ({ updateTaskModal, setUpdateTaskModal }) => {
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/40 bg-opacity-50">
       <div
         className={`${
-          theme ? "bg-white/10 text-white" : "bg-white text-black"
+          theme ? "bg-[#131B29] text-white" : "bg-white text-black"
         }  rounded-lg shadow-lg p-6 w-96`}
       >
         <h2 className="text-lg font-semibold mb-4">Update Task</h2>
