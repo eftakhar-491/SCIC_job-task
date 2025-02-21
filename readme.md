@@ -6,8 +6,7 @@ This is a Task Management Application where users can add, edit, delete, and reo
 
 ## Live Demo
 
-- Frontend: [Live Link](#)
-- Backend: [Live Link](#)
+- LiveUrl: [Live Link](https://task-manager-scic-curd.web.app/)
 
 ## Technologies Used
 
@@ -107,7 +106,3 @@ Open [http://localhost:5173](http://localhost:5173) (or the port Vite specifies)
 - **Real-Time Updates:** Changes reflect instantly using WebSockets
 - **Persistent Storage:** Saves task updates instantly in the database
 - **Responsive Design:** Optimized for mobile and desktop
-
-## License
-
-This project is open-source under the MIT License.
