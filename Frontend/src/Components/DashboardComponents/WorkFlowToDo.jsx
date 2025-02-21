@@ -13,11 +13,11 @@ export default function WorkFlowToDo() {
   const [openAddModal, setAddOpenModal] = useState(false);
   const { theme } = useTheme();
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io(`${import.meta.env.VITE_API_URL}`);
 
     const fetchTasks = async () => {
       const res = await fetch(
-        `http://localhost:5000/api/tasks?email=${user?.email}`
+        `${import.meta.env.VITE_API_URL}/api/tasks?email=${user?.email}`
       );
       const data = await res.json();
       console.log(data);
@@ -35,16 +35,19 @@ export default function WorkFlowToDo() {
     console.log(activeCard);
     try {
       console.log(activeCard, category, position);
-      await fetch(`http://localhost:5000/api/tasks/${activeCard[1]._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category,
-          position: parseInt(position),
-          fromCategory: activeCard[1]?.category,
-          fromPosition: activeCard[1]?.position,
-        }),
-      });
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/api/tasks/${activeCard[1]._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            category,
+            position: parseInt(position),
+            fromCategory: activeCard[1]?.category,
+            fromPosition: activeCard[1]?.position,
+          }),
+        }
+      );
     } catch (err) {
       console.error("Update failed:", err);
     }

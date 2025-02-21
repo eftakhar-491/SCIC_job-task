@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import UpdateTaskModal from "./UpdateTaskModal";
 import { io } from "socket.io-client";
 import { useTheme } from "../../Context/ThemeContext";
-const socket = io("http://localhost:5000");
+const socket = io(`${import.meta.env.VITE_API_URL}`);
 
 export default function TaskCard({ task, setActiveCard, index }) {
   const [updateTaskModal, setUpdateTaskModal] = useState({
@@ -21,7 +21,9 @@ export default function TaskCard({ task, setActiveCard, index }) {
     console.log(DeleteData);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/tasks/delete/${DeleteData?._id}?position=${DeleteData?.position}&category=${DeleteData?.category}`,
+        `${import.meta.env.VITE_API_URL}/api/tasks/delete/${
+          DeleteData?._id
+        }?position=${DeleteData?.position}&category=${DeleteData?.category}`,
         {
           method: "DELETE",
         }

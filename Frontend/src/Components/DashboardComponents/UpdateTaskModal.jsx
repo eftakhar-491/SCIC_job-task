@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { io } from "socket.io-client";
 import { useTheme } from "../../Context/ThemeContext";
-const socket = io("http://localhost:5000");
+const socket = io(`${import.meta.env.VITE_API_URL}`);
 
 const UpdateTaskModal = ({ updateTaskModal, setUpdateTaskModal }) => {
   const { theme } = useTheme();
@@ -17,17 +17,20 @@ const UpdateTaskModal = ({ updateTaskModal, setUpdateTaskModal }) => {
 
     console.log({ title, description, category });
 
-    fetch(`http://localhost:5000/api/tasks/${updateTaskModal?.data?._id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        description,
-        category,
-      }),
-    })
+    fetch(
+      `${import.meta.env.VITE_API_URL}/api/tasks/${updateTaskModal?.data?._id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          category,
+        }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("Task updated:", data);
