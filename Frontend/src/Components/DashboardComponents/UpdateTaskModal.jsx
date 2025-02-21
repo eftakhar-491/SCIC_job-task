@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { io } from "socket.io-client";
 import { useTheme } from "../../Context/ThemeContext";
-const socket = io(`${import.meta.env.VITE_API_URL}`);
+const socket = io(`${import.meta.env.VITE_API_URL}`, {
+  withCredentials: true,
+});
 
 const UpdateTaskModal = ({ updateTaskModal, setUpdateTaskModal }) => {
   const { theme } = useTheme();

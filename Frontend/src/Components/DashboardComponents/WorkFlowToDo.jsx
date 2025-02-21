@@ -13,7 +13,9 @@ export default function WorkFlowToDo() {
   const [openAddModal, setAddOpenModal] = useState(false);
   const { theme } = useTheme();
   useEffect(() => {
-    const socket = io(`${import.meta.env.VITE_API_URL}`);
+    const socket = io(`${import.meta.env.VITE_API_URL}`, {
+      withCredentials: true,
+    });
 
     const fetchTasks = async () => {
       const res = await fetch(

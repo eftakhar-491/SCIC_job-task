@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import UpdateTaskModal from "./UpdateTaskModal";
 import { io } from "socket.io-client";
 import { useTheme } from "../../Context/ThemeContext";
-const socket = io(`${import.meta.env.VITE_API_URL}`);
+const socket = io(`${import.meta.env.VITE_API_URL}`, {
+  withCredentials: true,
+});
 
 export default function TaskCard({ task, setActiveCard, index }) {
   const [updateTaskModal, setUpdateTaskModal] = useState({

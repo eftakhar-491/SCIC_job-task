@@ -12,11 +12,9 @@ app.use(express.json());
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://task-management-scic-curd.vercel.app",
-    ],
-    methods: ["GET", "POST"],
+    origin: ["http://localhost:5173", "https://task-manager-scic-curd.web.app"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
   },
 });
 
@@ -60,7 +58,10 @@ app.post("/api/tasks", async (req, res) => {
       ...req.body,
     });
     const newTask = { _id: result.insertedId, ...req.body };
+
+    // Ensure the event is emitted after the task is added
     io.emit("tasks-updated");
+
     res.status(201).json(newTask);
   } catch (err) {
     res.status(400).json({ message: err.message });
