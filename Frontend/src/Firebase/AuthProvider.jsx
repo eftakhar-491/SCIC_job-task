@@ -9,8 +9,8 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { app } from "./Firebase.init";
-
+import { app } from "./Fitebase.init";
+import axios from "axios";
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -39,12 +39,33 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  const updateUserProfile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    });
+  };
+
   // onAuthStateChange
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      console.log(currentUser);
+      if (currentUser) {
+        setLoading(true);
+        // await axios.post(
+        //   `${import.meta.env.VITE_APIURL}/jwt`,
+        //   { email: currentUser?.email },
+        //   { withCredentials: true }
+        // );
+      } else {
+        // await axios.post(
+        //   `${import.meta.env.VITE_APIURL}/logout`,
+        //   {},
+        //   { withCredentials: true }
+        // );
+      }
+
       setLoading(false);
     });
     return () => {
@@ -61,6 +82,7 @@ const AuthProvider = ({ children }) => {
     signIn,
     signInWithGoogle,
     logOut,
+    updateUserProfile,
   };
 
   return (

@@ -1,21 +1,19 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Register from "./Components/Register.jsx";
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-]);
+import { BrowserRouter } from "react-router";
+import AppRoutes from "./Routes.jsx";
+import AuthProvider from "./Firebase/AuthProvider";
+import { ThemeProvider } from "./Context/ThemeContext";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <BrowserRouter>
+        <ThemeProvider>
+          <AppRoutes />
+        </ThemeProvider>
+      </BrowserRouter>
+    </AuthProvider>
   </StrictMode>
 );

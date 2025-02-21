@@ -1,18 +1,17 @@
-import Login from "./Components/Login";
-import Register from "./Components/Register";
-import WorkFlowToDo from "./Components/DashboardComponents/WorkFlowToDo";
-import Dashboard from "./Components/dashboard";
 import AuthProvider from "./Firebase/AuthProvider";
 import Layout from "./Layout";
 import { ThemeProvider } from "./Context/ThemeContext";
+import ProtectCom from "./ProtectRoute/ProtectCom";
+import { Outlet } from "react-router";
+
 function App() {
   return (
     <>
-      <ThemeProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <ThemeProvider>
           <Layout />
-        </AuthProvider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </>
   );
 }

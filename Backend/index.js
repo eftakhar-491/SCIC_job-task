@@ -12,7 +12,10 @@ app.use(express.json());
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://task-management-scic-curd.vercel.app",
+    ],
     methods: ["GET", "POST"],
   },
 });
@@ -44,7 +47,13 @@ app.get("/api/tasks", async (req, res) => {
 
 app.post("/api/tasks", async (req, res) => {
   try {
-    const result = await tasksCollection.insertOne(req.body);
+    const len = await tasksCollection
+      .find({ category: req.body.category })
+      .toArray();
+    const result = await tasksCollection.insertOne({
+      position: len.length,
+      ...req.body,
+    });
     const newTask = { _id: result.insertedId, ...req.body };
     io.emit("tasks-updated");
     res.status(201).json(newTask);
@@ -57,9 +66,27 @@ app.put("/api/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
     console.log(req.body, id);
+
+    // Update the positions of tasks in the same category to avoid duplicates
+
+    const { category, position, fromCategory, fromPosition } = req.body;
+
+    await tasksCollection.updateMany(
+      { category: fromCategory, position: { $gt: fromPosition } },
+      { $inc: { position: -1 } }
+    );
+
+    // Step 2: Increment positions in the target category
+    await tasksCollection.updateMany(
+      { category, position: { $gte: position } },
+      { $inc: { position: 1 } }
+    );
+
+    // Step 3: Update the dragged task's category and position
+
     const result = await tasksCollection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: req.body }
+      { $set: { position, category } }
     );
 
     if (result.matchedCount === 0) {

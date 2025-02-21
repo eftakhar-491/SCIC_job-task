@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IoMdPerson } from "react-icons/io";
 import { FaMoon, FaSun } from "react-icons/fa";
 import logo from "../assets/logo.png";
+
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(true);

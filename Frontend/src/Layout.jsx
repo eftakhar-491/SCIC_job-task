@@ -1,10 +1,10 @@
 import React from "react";
-import Login from "./Components/Login";
+import { Outlet } from "react-router";
 
 export default function Layout() {
   return (
     <>
-      <Login />
+      <Outlet />
     </>
   );
 }
