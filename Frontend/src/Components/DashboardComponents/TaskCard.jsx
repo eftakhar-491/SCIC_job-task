@@ -20,7 +20,6 @@ export default function TaskCard({ task, setActiveCard, index }) {
   }
   const { theme } = useTheme();
   async function handelDelete(DeleteData) {
-    console.log(DeleteData);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/tasks/delete/${
@@ -36,7 +35,6 @@ export default function TaskCard({ task, setActiveCard, index }) {
       }
 
       const data = await response.json();
-      console.log("Task deleted:", data);
 
       // Emit socket event to update the task on the DOM
       socket.emit("tasks-updated");

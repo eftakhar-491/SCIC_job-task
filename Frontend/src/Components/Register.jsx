@@ -24,7 +24,6 @@ const Register = () => {
     e.preventDefault();
     try {
       const userCredential = await createUser(email, password);
-      console.log("User registered:", userCredential);
     } catch (error) {
       console.error("Registration failed:", error);
     }
@@ -33,10 +32,7 @@ const Register = () => {
   const handleGoogleSignup = async () => {
     try {
       const result = await signInWithGoogle();
-      console.log("Google sign-in successful:", result);
-    } catch (error) {
-      console.error("Google sign-in failed:", error);
-    }
+    } catch (error) {}
   };
 
   return (

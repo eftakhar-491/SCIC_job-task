@@ -28,7 +28,6 @@ async function connectDB() {
   await client.connect();
   db = client.db(DB_NAME);
   tasksCollection = db.collection("tasks");
-  console.log("Connected to MongoDB");
 }
 
 connectDB().catch(console.error);
@@ -36,7 +35,7 @@ connectDB().catch(console.error);
 // CRUD APIs
 app.get("/api/tasks", async (req, res) => {
   const email = req.query.email;
-  console.log(email);
+
   try {
     const tasks = await tasksCollection
       .find({ email })
@@ -71,7 +70,6 @@ app.post("/api/tasks", async (req, res) => {
 app.put("/api/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(req.body, id);
 
     // Update the positions of tasks in the same category to avoid duplicates
 
@@ -159,9 +157,7 @@ app.delete("/api/tasks/delete/:id", async (req, res) => {
 });
 
 // Socket.io Connection
-io.on("connection", (socket) => {
-  console.log("Client connected:", socket.id);
-});
+io.on("connection", (socket) => {});
 
 const PORT = 5000;
 httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));

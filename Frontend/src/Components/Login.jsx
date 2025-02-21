@@ -21,7 +21,6 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await signIn(email, password);
-      console.log(res);
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -29,7 +28,6 @@ const Login = () => {
 
   const handelGoogleLogin = async () => {
     const res = await signInWithGoogle();
-    console.log(res);
   };
 
   return (

@@ -17,8 +17,6 @@ const UpdateTaskModal = ({ updateTaskModal, setUpdateTaskModal }) => {
   const handleUpdate = (e) => {
     e.preventDefault();
 
-    console.log({ title, description, category });
-
     fetch(
       `${import.meta.env.VITE_API_URL}/api/tasks/${updateTaskModal?.data?._id}`,
       {
@@ -35,7 +33,6 @@ const UpdateTaskModal = ({ updateTaskModal, setUpdateTaskModal }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("Task updated:", data);
         setUpdateTaskModal({ open: false, data: {} });
 
         // Emit socket event to update the task on the DOM

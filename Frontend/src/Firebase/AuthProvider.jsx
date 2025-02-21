@@ -7,7 +7,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
 } from "firebase/auth";
 import { app } from "./Fitebase.init";
 
@@ -39,33 +38,11 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  const updateUserProfile = (name, photo) => {
-    return updateProfile(auth.currentUser, {
-      displayName: name,
-      photoURL: photo,
-    });
-  };
-
-  // onAuthStateChange
-
   useEffect(() => {
+    setLoading(true);
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      if (currentUser) {
-        setLoading(true);
-        // await axios.post(
-        //   `${import.meta.env.VITE_APIURL}/jwt`,
-        //   { email: currentUser?.email },
-        //   { withCredentials: true }
-        // );
-      } else {
-        // await axios.post(
-        //   `${import.meta.env.VITE_APIURL}/logout`,
-        //   {},
-        //   { withCredentials: true }
-        // );
-      }
-      console.log(currentUser);
+
       setLoading(false);
     });
     return () => {

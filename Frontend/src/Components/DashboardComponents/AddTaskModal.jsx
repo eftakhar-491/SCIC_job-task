@@ -12,8 +12,6 @@ const AddTaskModal = ({ setAddOpenModal }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log({ title, description, category });
-
     fetch(`${import.meta.env.VITE_API_URL}/api/tasks`, {
       method: "POST",
       headers: {
@@ -29,7 +27,6 @@ const AddTaskModal = ({ setAddOpenModal }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Task added:", data);
         setAddOpenModal(false);
       })
       .catch((error) => {

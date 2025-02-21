@@ -20,7 +20,7 @@ export default function WorkFlowToDo() {
         `${import.meta.env.VITE_API_URL}/api/tasks?email=${user?.email}`
       );
       const data = await res.json();
-      console.log(data);
+
       setTasks(data);
     };
 
@@ -32,9 +32,8 @@ export default function WorkFlowToDo() {
   }, []);
   const onDrop = async (category, position) => {
     if (!activeCard) return;
-    console.log(activeCard);
+
     try {
-      console.log(activeCard, category, position);
       await fetch(
         `${import.meta.env.VITE_API_URL}/api/tasks/${activeCard[1]._id}`,
         {
