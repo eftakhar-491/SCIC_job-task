@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { app } from "./Fitebase.init";
-import axios from "axios";
+
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -65,7 +65,7 @@ const AuthProvider = ({ children }) => {
         //   { withCredentials: true }
         // );
       }
-
+      console.log(currentUser);
       setLoading(false);
     });
     return () => {

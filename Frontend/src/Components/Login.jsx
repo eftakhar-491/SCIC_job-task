@@ -8,15 +8,30 @@ import logo from "../assets/logo.png";
 import { useTheme } from "../Context/ThemeContext";
 import { Link } from "react-router";
 import { AuthContext } from "../Firebase/AuthProvider";
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const togglePasswordView = () => setShowPassword(!showPassword);
   const { theme, toggleTheme } = useTheme();
-  const { signInWithGoogle } = useContext(AuthContext);
+  const { signInWithGoogle, signIn } = useContext(AuthContext);
+
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await signIn(email, password);
+      console.log(res);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
   const handelGoogleLogin = async () => {
     const res = await signInWithGoogle();
     console.log(res);
   };
+
   return (
     <section className={theme ? "bg-black" : "bg-white"}>
       <div
@@ -46,7 +61,10 @@ const Login = () => {
             )}
           </button>
 
-          <div className="w-full flex flex-col gap-3">
+          <form
+            className="w-full flex flex-col gap-3"
+            onSubmit={handleEmailLogin}
+          >
             <div
               className={`w-full flex items-center gap-2 ${
                 theme ? "bg-gray-800" : "bg-gray-300"
@@ -56,6 +74,8 @@ const Login = () => {
               <input
                 type="email"
                 placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className={`bg-transparent border-0 w-full outline-none text-sm md:text-base ${
                   theme ? "text-white" : "text-black"
                 }`}
@@ -71,6 +91,8 @@ const Login = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className={`bg-transparent border-0 w-full outline-none text-sm md:text-base ${
                   theme ? "text-white" : "text-black"
                 }`}
@@ -87,17 +109,18 @@ const Login = () => {
                 />
               )}
             </div>
-          </div>
 
-          <button
-            className={`w-full p-2 rounded-xl mt-3 ${
-              theme
-                ? "bg-blue-500 hover:bg-blue-600"
-                : "bg-blue-500 hover:bg-blue-600"
-            } text-sm md:text-base`}
-          >
-            Login
-          </button>
+            <button
+              type="submit"
+              className={`w-full p-2 rounded-xl mt-3 ${
+                theme
+                  ? "bg-blue-500 hover:bg-blue-600"
+                  : "bg-blue-500 hover:bg-blue-600"
+              } text-sm md:text-base`}
+            >
+              Login
+            </button>
+          </form>
 
           <div className="relative w-full flex items-center justify-center py-3">
             <div className="w-2/5 h-[2px] bg-gray-800"></div>

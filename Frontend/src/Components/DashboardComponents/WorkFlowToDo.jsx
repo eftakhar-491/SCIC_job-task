@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TaskColumn from "./TaskColumn";
 
 import { io } from "socket.io-client";
 import AddTaskModal from "./AddTaskModal";
+import { AuthContext } from "../../Firebase/AuthProvider";
+import { useTheme } from "../../Context/ThemeContext";
 
 export default function WorkFlowToDo() {
+  const { user } = useContext(AuthContext);
   const [activeCard, setActiveCard] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [openAddModal, setAddOpenModal] = useState(false);
+  const { theme } = useTheme();
   useEffect(() => {
     const socket = io("http://localhost:5000");
 
     const fetchTasks = async () => {
-      const res = await fetch("http://localhost:5000/api/tasks");
+      const res = await fetch(
+        `http://localhost:5000/api/tasks?email=${user?.email}`
+      );
       const data = await res.json();
       console.log(data);
       setTasks(data);
@@ -20,6 +26,7 @@ export default function WorkFlowToDo() {
 
     fetchTasks();
     socket.on("tasks-updated", fetchTasks);
+    socket.on("task-updated", fetchTasks);
 
     return () => socket.disconnect();
   }, []);
@@ -50,7 +57,11 @@ export default function WorkFlowToDo() {
   return (
     <>
       {openAddModal && <AddTaskModal setAddOpenModal={setAddOpenModal} />}
-      <div className="flex justify-around p-6 bg-gray-100">
+      <div
+        className={`${
+          theme ? "bg-[#101828]/70" : "bg-gray-100"
+        } flex lg:justify-around justify-start flex-wrap p-2 lg:p-6 rounded-b-2xl min-h-[500px]`}
+      >
         <TaskColumn
           setActiveCard={setActiveCard}
           title="🔵 To Start"

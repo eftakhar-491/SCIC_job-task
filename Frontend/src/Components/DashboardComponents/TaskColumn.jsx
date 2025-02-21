@@ -1,6 +1,7 @@
 import React from "react";
 import TaskCard from "./TaskCard";
 import DropArea from "./DropArea";
+import { useTheme } from "../../Context/ThemeContext";
 
 const TaskColumn = ({
   title,
@@ -11,14 +12,16 @@ const TaskColumn = ({
   category,
   setAddOpenModal,
 }) => {
-  // console.log(tasks);
+  const { theme } = useTheme();
   return (
-    <div className="w-1/3 p-4">
+    <div className="w-1/3 p-4 min-w-[280px]">
       <h2 className={`font-bold mb-4 ${color}`}>{title}</h2>
       {category === "to-do" && (
         <button
           onClick={setAddOpenModal}
-          className="w-full bg-gray-200 mb-4 p-3 rounded-lg text-gray-600 hover:bg-gray-300"
+          className={`w-full  mb-4 p-3 rounded-lg  ${
+            theme ? "bg-white/10 text-white" : "bg-gray-200 text-gray-600"
+          }`}
         >
           ➕ Add New
         </button>

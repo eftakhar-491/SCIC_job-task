@@ -1,21 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { AuthContext } from "../../Firebase/AuthProvider";
+import { io } from "socket.io-client";
 import { useTheme } from "../../Context/ThemeContext";
+const socket = io("http://localhost:5000");
 
-const AddTaskModal = ({ setAddOpenModal }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("to-do");
-  const { user } = useContext(AuthContext);
+const UpdateTaskModal = ({ updateTaskModal, setUpdateTaskModal }) => {
   const { theme } = useTheme();
-  const handleSubmit = (e) => {
+  const [title, setTitle] = useState(updateTaskModal?.data?.title);
+  const [description, setDescription] = useState(
+    updateTaskModal?.data?.description
+  );
+  const [category, setCategory] = useState(updateTaskModal?.data?.category);
+
+  const handleUpdate = (e) => {
     e.preventDefault();
 
     console.log({ title, description, category });
 
-    fetch("http://localhost:5000/api/tasks", {
-      method: "POST",
+    fetch(`http://localhost:5000/api/tasks/${updateTaskModal?.data?._id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -23,17 +26,18 @@ const AddTaskModal = ({ setAddOpenModal }) => {
         title,
         description,
         category,
-        timestamp: new Date().toISOString(),
-        email: user?.email,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Task added:", data);
-        setAddOpenModal(false);
+        console.log("Task updated:", data);
+        setUpdateTaskModal({ open: false, data: {} });
+
+        // Emit socket event to update the task on the DOM
+        socket.emit("task-updated", data);
       })
       .catch((error) => {
-        console.error("Error adding task:", error);
+        console.error("Error updating task:", error);
       });
   };
 
@@ -44,8 +48,8 @@ const AddTaskModal = ({ setAddOpenModal }) => {
           theme ? "bg-white/10 text-white" : "bg-white text-black"
         }  rounded-lg shadow-lg p-6 w-96`}
       >
-        <h2 className="text-lg font-semibold mb-4">Add New Task</h2>
-        <form onSubmit={handleSubmit}>
+        <h2 className="text-lg font-semibold mb-4">Update Task</h2>
+        <form onSubmit={handleUpdate}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Title</label>
             <input
@@ -83,7 +87,7 @@ const AddTaskModal = ({ setAddOpenModal }) => {
           <div className="flex justify-between">
             <button
               type="button"
-              onClick={() => setAddOpenModal(false)}
+              onClick={() => setUpdateTaskModal({ open: false, data: {} })}
               className="bg-gray-300 hover:bg-gray-400 text-black font-semibold py-2 px-4 rounded"
             >
               Cancel
@@ -92,7 +96,7 @@ const AddTaskModal = ({ setAddOpenModal }) => {
               type="submit"
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
             >
-              Add Task
+              Update Task
             </button>
           </div>
         </form>
@@ -101,4 +105,4 @@ const AddTaskModal = ({ setAddOpenModal }) => {
   );
 };
 
-export default AddTaskModal;
+export default UpdateTaskModal;

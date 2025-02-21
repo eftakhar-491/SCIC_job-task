@@ -37,8 +37,13 @@ connectDB().catch(console.error);
 
 // CRUD APIs
 app.get("/api/tasks", async (req, res) => {
+  const email = req.query.email;
+  console.log(email);
   try {
-    const tasks = await tasksCollection.find().sort({ position: 1 }).toArray();
+    const tasks = await tasksCollection
+      .find({ email })
+      .sort({ position: 1 })
+      .toArray();
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -95,6 +100,58 @@ app.put("/api/tasks/:id", async (req, res) => {
 
     io.emit("tasks-updated");
     res.json({ ...req.body, _id: id });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+app.patch("/api/tasks/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const result = await tasksCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updateData }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    const updatedTask = await tasksCollection.findOne({
+      _id: new ObjectId(id),
+    });
+
+    io.emit("task-updated");
+    res.json(updatedTask);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+app.delete("/api/tasks/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const position = parseInt(req.query.position);
+    const category = parseInt(req.query.category);
+
+    // Step 1: Delete the task
+    const deleteResult = await tasksCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    if (deleteResult.deletedCount === 0) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Step 2: Decrement positions of tasks in the same category
+    await tasksCollection.updateMany(
+      { category: category, position: { $gt: position } },
+      { $inc: { position: -1 } }
+    );
+
+    io.emit("tasks-updated");
+    res.status(200).json({ message: "Task deleted successfully" });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

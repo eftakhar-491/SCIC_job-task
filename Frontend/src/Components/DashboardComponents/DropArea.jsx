@@ -13,11 +13,10 @@ export default function DropArea({ onDrop }) {
       }}
       className={`${
         showDrop
-          ? "h-8 w-full text-sm rounded-2xl opacity-100 border-gray-300 mb-4 border flex justify-center items-center"
+          ? "h-4 bg-blue-500 w-full text-[8px] rounded-2xl opacity-100 border-gray-300 mb-4 border flex justify-center items-center"
           : "opacity-0"
       }`}
     >
-      {/* {showDrop ? "Drop Here" : "Drop Here"} */}
       Drop Here
     </div>
   );

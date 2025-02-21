@@ -5,11 +5,11 @@ import WorkFlowToDo from "./DashboardComponents/WorkFlowToDo";
 export default function Dashboard() {
   return (
     <>
-      <section className="max-w-7xl mx-auto rounded-t-2xl mt-3">
+      <section className="px-4 max-w-7xl mx-auto  rounded-2xl mt-3 ">
         <header className="">
           <Nav />
         </header>
-        <main className="max-w-7xl mx-auto">
+        <main className="max-w-7xl mx-auto rounded-b-2xl">
           <WorkFlowToDo />
         </main>
       </section>
